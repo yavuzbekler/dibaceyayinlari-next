@@ -80,7 +80,12 @@ export function AdminManager({ mode, rows, authors = [] }: { mode: Mode; rows: (
                 <td><strong>{item.title ?? item.name ?? item.key}</strong></td>
                 <td>{item.genre ?? item.short_bio ?? item.description}</td>
                 <td className="admin-actions">
-                  <button className="admin-btn secondary" onClick={() => setEditing({ ...item, original_id: item.id })}>Düzenle</button>
+                  <button
+                    className="admin-btn secondary"
+                    onClick={() => setEditing(isBook ? { ...item, original_id: item.id } : item)}
+                  >
+                    Düzenle
+                  </button>
                   <button className="admin-btn danger" onClick={() => remove(item.id)}>Sil</button>
                 </td>
               </tr>

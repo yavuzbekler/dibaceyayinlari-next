@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getAdminClient } from "@/lib/db";
 
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
@@ -28,6 +30,10 @@ async function upsertBook(request: Request) {
 
   if (!book.id) {
     return NextResponse.json({ error: "Kitap ID zorunlu." }, { status: 400 });
+  }
+
+  if (!slugPattern.test(book.id)) {
+    return NextResponse.json({ error: "Kitap ID sadece küçük harf, rakam ve tire içerebilir." }, { status: 400 });
   }
 
   const supabase = await getAdminClient();

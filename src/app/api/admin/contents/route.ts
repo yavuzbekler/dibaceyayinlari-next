@@ -13,7 +13,8 @@ export async function PUT(request: Request) {
 async function upsertContent(request: Request) {
   if (!isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await request.json();
-  const { data, error } = await (await getAdminClient()).from("site_contents").upsert(body, { onConflict: "key" }).select("*").single();
+  const { original_id, created_at, updated_at, ...content } = body;
+  const { data, error } = await (await getAdminClient()).from("site_contents").upsert(content, { onConflict: "key" }).select("*").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
   return NextResponse.json(data);
 }
