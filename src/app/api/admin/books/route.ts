@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getAdminClient } from "@/lib/db";
 
@@ -58,6 +59,7 @@ async function upsertBook(request: Request) {
     .eq("id", data.id)
     .single();
   if (freshError) return NextResponse.json({ error: freshError.message }, { status: 400 });
+  revalidatePath("/", "layout");
   return NextResponse.json(fresh);
 }
 
@@ -67,5 +69,6 @@ export async function DELETE(request: Request) {
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const { error } = await (await getAdminClient()).from("books").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  revalidatePath("/", "layout");
   return NextResponse.json({ ok: true });
 }

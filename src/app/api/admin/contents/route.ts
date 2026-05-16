@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getAdminClient } from "@/lib/db";
 
@@ -16,6 +17,7 @@ async function upsertContent(request: Request) {
   const { original_id, created_at, updated_at, ...content } = body;
   const { data, error } = await (await getAdminClient()).from("site_contents").upsert(content, { onConflict: "key" }).select("*").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  revalidatePath("/", "layout");
   return NextResponse.json(data);
 }
 
@@ -24,5 +26,6 @@ export async function DELETE(request: Request) {
   const id = new URL(request.url).searchParams.get("id");
   const { error } = await (await getAdminClient()).from("site_contents").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  revalidatePath("/", "layout");
   return NextResponse.json({ ok: true });
 }
