@@ -21,10 +21,19 @@ export default async function V1BookDetailPage({ params }: { params: { id: strin
             <div className="info-list">
               <div><b>Tür</b>{book.genre}</div><div><b>Yayın</b>{book.published_date}</div><div><b>ISBN</b>{book.isbn}</div>
             </div>
-            <h2>Satış Kanalları</h2>
-            <div className="sales-list">
-              {(book.sales_links ?? []).map((link) => <a key={link.url} href={link.url} target="_blank" rel="noreferrer"><strong>{link.name}</strong><span>{Number(link.price).toFixed(2)} TL →</span></a>)}
-            </div>
+            {(book.sales_links ?? []).length > 0 && (
+              <>
+                <h2>Satış Kanalları</h2>
+                <div className="sales-list">
+                  {[...(book.sales_links ?? [])].sort((a, b) => a.price - b.price).map((link) => (
+                    <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
+                      <strong>{link.name}</strong>
+                      <span>{Number(link.price) > 0 ? `${Number(link.price).toFixed(2)} TL` : "—"} →</span>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </section>
         </div>
       </main>

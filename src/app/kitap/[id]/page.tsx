@@ -27,15 +27,19 @@ export default async function BookDetailPage({ params }: { params: { id: string 
               <div><b>Yayın</b>{book.published_date}</div>
               <div><b>ISBN</b>{book.isbn}</div>
             </div>
-            <h2>Satış Kanalları</h2>
-            <div className="sales-list">
-              {links.map((link) => (
-                <a key={`${link.name}-${link.url}`} href={link.url} target="_blank" rel="noreferrer">
-                  <strong>{link.name}</strong>
-                  <span>{Number(link.price).toFixed(2)} TL →</span>
-                </a>
-              ))}
-            </div>
+            {links.length > 0 && (
+              <>
+                <h2>Satış Kanalları</h2>
+                <div className="sales-list">
+                  {links.map((link) => (
+                    <a key={`${link.name}-${link.url}`} href={link.url} target="_blank" rel="noreferrer">
+                      <strong>{link.name}</strong>
+                      <span>{Number(link.price) > 0 ? `${Number(link.price).toFixed(2)} TL` : "—"} →</span>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </section>
         </div>
       </main>
