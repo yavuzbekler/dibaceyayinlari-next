@@ -115,6 +115,10 @@ function BookFields({ value, setValue, authors }: { value: any; setValue: (v: an
     setValue({ ...value, sales_links: [...links, { name: "", url: "", price: 0 }] });
   }
 
+  function isSearchUrl(url: string) {
+    return url.includes("/sr?q=") || url.includes("/ara?q=") || url.includes("/s?k=");
+  }
+
   return (
     <>
       <input
@@ -135,10 +139,20 @@ function BookFields({ value, setValue, authors }: { value: any; setValue: (v: an
 
       <div className="sales-links-section">
         <span className="sales-links-label">Satış Kanalları</span>
+        <small style={{ color: "var(--admin-muted)", display: "block", marginBottom: 8 }}>
+          Fiyat otomatik güncelleme için doğrudan ürün sayfası URL'si girin (arama linki değil).
+        </small>
         {links.map((link: any, i: number) => (
           <div key={i} className="sales-link-row">
             <input placeholder="Kanal adı" value={link.name ?? ""} onChange={(e) => updateLink(i, "name", e.target.value)} />
-            <input placeholder="URL" value={link.url ?? ""} onChange={(e) => updateLink(i, "url", e.target.value)} />
+            <div style={{ flex: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+              <input placeholder="Ürün sayfası URL'si" value={link.url ?? ""} onChange={(e) => updateLink(i, "url", e.target.value)} />
+              {isSearchUrl(link.url ?? "") && (
+                <small style={{ color: "var(--admin-danger)", fontSize: 11 }}>
+                  ⚠ Bu bir arama linki — fiyat otomatik güncellenemez. Doğrudan ürün sayfası URL'si girin.
+                </small>
+              )}
+            </div>
             <input type="number" placeholder="Fiyat" value={link.price ?? ""} onChange={(e) => updateLink(i, "price", e.target.value)} />
             <button type="button" className="sales-link-remove" onClick={() => removeLink(i)}>✕</button>
           </div>

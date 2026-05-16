@@ -69,7 +69,12 @@ const siteExtractors: { domain: string; extract: Extractor }[] = [
   },
 ];
 
+function isSearchUrl(url: string): boolean {
+  return url.includes("/sr?q=") || url.includes("/ara?q=") || url.includes("/s?k=");
+}
+
 function findExtractor(url: string): Extractor | null {
+  if (isSearchUrl(url)) return null;
   for (const { domain, extract } of siteExtractors) {
     if (url.includes(domain)) return extract;
   }
