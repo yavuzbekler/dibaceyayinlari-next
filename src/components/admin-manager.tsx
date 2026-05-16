@@ -26,7 +26,10 @@ export function AdminManager({ mode, rows, authors = [] }: { mode: Mode; rows: (
     if (!response.ok) return alert(data.error ?? "Kaydetme hatası");
     setItems((current) => {
       const without = current.filter((item: any) => item.id !== data.id);
-      return [...without, data].sort((a: any, b: any) => String(a.id ?? a.key).localeCompare(String(b.id ?? b.key)));
+      return [...without, data].sort((a: any, b: any) => {
+        if (a.created_at && b.created_at) return String(a.created_at).localeCompare(String(b.created_at));
+        return String(a.id ?? a.key).localeCompare(String(b.id ?? b.key));
+      });
     });
     setEditing(null);
   }
@@ -77,7 +80,7 @@ export function AdminManager({ mode, rows, authors = [] }: { mode: Mode; rows: (
                 <td><strong>{item.title ?? item.name ?? item.key}</strong></td>
                 <td>{item.genre ?? item.short_bio ?? item.description}</td>
                 <td className="admin-actions">
-                  <button className="admin-btn secondary" onClick={() => setEditing(item)}>Düzenle</button>
+                  <button className="admin-btn secondary" onClick={() => setEditing({ ...item, original_id: item.id })}>Düzenle</button>
                   <button className="admin-btn danger" onClick={() => remove(item.id)}>Sil</button>
                 </td>
               </tr>
@@ -90,9 +93,16 @@ export function AdminManager({ mode, rows, authors = [] }: { mode: Mode; rows: (
 }
 
 function BookFields({ value, setValue, authors }: { value: any; setValue: (v: any) => void; authors: Author[] }) {
+  const isExisting = Boolean(value.original_id);
+
   return (
     <>
-      <input placeholder="Slug / ID" value={value.id ?? ""} onChange={(e) => setValue({ ...value, id: e.target.value })} />
+      <input
+        placeholder="Slug / ID"
+        value={value.id ?? ""}
+        disabled={isExisting}
+        onChange={(e) => setValue({ ...value, id: e.target.value })}
+      />
       <input placeholder="Kitap adı" value={value.title ?? ""} onChange={(e) => setValue({ ...value, title: e.target.value })} />
       <select value={value.author_id ?? ""} onChange={(e) => setValue({ ...value, author_id: e.target.value })}>{authors.map((author) => <option key={author.id} value={author.id}>{author.name}</option>)}</select>
       <input placeholder="Kapak URL" value={value.cover ?? ""} onChange={(e) => setValue({ ...value, cover: e.target.value })} />
