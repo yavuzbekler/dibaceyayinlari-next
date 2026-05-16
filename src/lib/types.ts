@@ -34,3 +34,11 @@ export type SiteContent = {
   value: string;
   description: string;
 };
+
+export type Admin = {
+  id: string;
+  username: string;
+  password_hash?: string;
+  email: string | null;
+  created_at?: string;
+};

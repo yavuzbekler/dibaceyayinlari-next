@@ -6,11 +6,19 @@ import { redirect } from "next/navigation";
 export const adminCookieName = "dibace_admin";
 
 export function isAdminAuthenticated() {
-  return cookies().get(adminCookieName)?.value === "true";
+  const val = cookies().get(adminCookieName)?.value;
+  return !!val;
 }
 
-export function requireAdmin() {
-  if (!isAdminAuthenticated()) {
-    redirect("/admin/login");
-  }
+export function getAdminUsername(): string | null {
+  const val = cookies().get(adminCookieName)?.value;
+  if (!val) return null;
+  if (val === "true") return "admin";
+  return val;
+}
+
+export function requireAdmin(): string {
+  const username = getAdminUsername();
+  if (!username) redirect("/admin/login");
+  return username;
 }

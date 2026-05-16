@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   }
 
   const response = NextResponse.redirect(redirectUrl(request, "/admin"));
-  response.cookies.set(adminCookieName, "true", {
+  response.cookies.set(adminCookieName, username, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

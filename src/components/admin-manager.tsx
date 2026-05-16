@@ -99,6 +99,21 @@ export function AdminManager({ mode, rows, authors = [] }: { mode: Mode; rows: (
 
 function BookFields({ value, setValue, authors }: { value: any; setValue: (v: any) => void; authors: Author[] }) {
   const isExisting = Boolean(value.original_id);
+  const links: any[] = value.sales_links ?? [];
+
+  function updateLink(index: number, field: string, val: string) {
+    const updated = [...links];
+    updated[index] = { ...updated[index], [field]: field === "price" ? val : val };
+    setValue({ ...value, sales_links: updated });
+  }
+
+  function removeLink(index: number) {
+    setValue({ ...value, sales_links: links.filter((_: any, i: number) => i !== index) });
+  }
+
+  function addLink() {
+    setValue({ ...value, sales_links: [...links, { name: "", url: "", price: 0 }] });
+  }
 
   return (
     <>
@@ -109,15 +124,27 @@ function BookFields({ value, setValue, authors }: { value: any; setValue: (v: an
         onChange={(e) => setValue({ ...value, id: e.target.value })}
       />
       <input placeholder="Kitap adı" value={value.title ?? ""} onChange={(e) => setValue({ ...value, title: e.target.value })} />
-      <select value={value.author_id ?? ""} onChange={(e) => setValue({ ...value, author_id: e.target.value })}>{authors.map((author) => <option key={author.id} value={author.id}>{author.name}</option>)}</select>
+      <select value={value.author_id ?? ""} onChange={(e) => setValue({ ...value, author_id: e.target.value })}>
+        {authors.map((author) => <option key={author.id} value={author.id}>{author.name}</option>)}
+      </select>
       <input placeholder="Kapak URL" value={value.cover ?? ""} onChange={(e) => setValue({ ...value, cover: e.target.value })} />
       <textarea placeholder="Özet" value={value.summary ?? ""} onChange={(e) => setValue({ ...value, summary: e.target.value })} />
       <input placeholder="ISBN" value={value.isbn ?? ""} onChange={(e) => setValue({ ...value, isbn: e.target.value })} />
       <input placeholder="Yayın yılı" value={value.published_date ?? ""} onChange={(e) => setValue({ ...value, published_date: e.target.value })} />
       <input placeholder="Tür" value={value.genre ?? ""} onChange={(e) => setValue({ ...value, genre: e.target.value })} />
-      <textarea placeholder='Satış linkleri JSON: [{"name":"Ravza Kitap","url":"...","price":60}]' value={JSON.stringify(value.sales_links ?? [], null, 2)} onChange={(e) => {
-        try { setValue({ ...value, sales_links: JSON.parse(e.target.value) }); } catch {}
-      }} />
+
+      <div className="sales-links-section">
+        <span className="sales-links-label">Satış Kanalları</span>
+        {links.map((link: any, i: number) => (
+          <div key={i} className="sales-link-row">
+            <input placeholder="Kanal adı" value={link.name ?? ""} onChange={(e) => updateLink(i, "name", e.target.value)} />
+            <input placeholder="URL" value={link.url ?? ""} onChange={(e) => updateLink(i, "url", e.target.value)} />
+            <input type="number" placeholder="Fiyat" value={link.price ?? ""} onChange={(e) => updateLink(i, "price", e.target.value)} />
+            <button type="button" className="sales-link-remove" onClick={() => removeLink(i)}>✕</button>
+          </div>
+        ))}
+        <button type="button" className="sales-link-add" onClick={addLink}>+ Kanal Ekle</button>
+      </div>
     </>
   );
 }

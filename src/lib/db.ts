@@ -85,3 +85,15 @@ export async function getAdminStats() {
 export async function getAdminClient() {
   return getSupabaseAdmin();
 }
+
+export async function getAdmins() {
+  const { data, error } = await getSupabaseAdmin().from("admins").select("id, username, email, created_at").order("created_at");
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getAdminByUsername(username: string) {
+  const { data, error } = await getSupabaseAdmin().from("admins").select("*").eq("username", username).maybeSingle();
+  if (error) throw error;
+  return data;
+}
