@@ -1,0 +1,14 @@
+.git
+.next
+node_modules
+obj
+bin
+*.slnx
+*.csproj
+*.cs
+Views
+Controllers
+Models
+Services
+Data
+BackgroundServices
