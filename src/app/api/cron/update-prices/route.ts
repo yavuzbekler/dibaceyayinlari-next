@@ -49,12 +49,22 @@ const siteExtractors: { domain: string; extract: Extractor }[] = [
   {
     domain: "amazon.com.tr",
     extract: ($) => {
+      const candidates: number[] = [];
+      // Core price (buybox / main listing)
+      const corePrice = $("#corePrice_feature_div .a-offscreen").first().text();
+      if (corePrice) { const p = parseTurkishPrice(corePrice); if (p) candidates.push(p); }
+      // Standard a-price (usually the displayed price)
+      const aPrice = $("#price .a-offscreen, .a-price[data-a-size='xl'] .a-offscreen").first().text();
+      if (aPrice) { const p = parseTurkishPrice(aPrice); if (p) candidates.push(p); }
+      // slot-price with aria-label
       const label = $("span.slot-price span[aria-label]").first().attr("aria-label") ?? "";
-      if (label) return parseTurkishPrice(label);
+      if (label) { const p = parseTurkishPrice(label); if (p) candidates.push(p); }
+      // Split price elements
       const priceWhole = $("span.a-price-whole").first().text();
       const priceFrac = $("span.a-price-fraction").first().text();
-      if (priceWhole) return parseTurkishPrice(`${priceWhole}${priceFrac}`);
-      return null;
+      if (priceWhole) { const p = parseTurkishPrice(`${priceWhole}${priceFrac}`); if (p) candidates.push(p); }
+      // Return the lowest price found (most likely the real price, not a seller markup)
+      return candidates.length ? Math.min(...candidates) : null;
     },
   },
 ];
