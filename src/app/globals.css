@@ -282,15 +282,116 @@ button, input, textarea, select { font: inherit; }
 .author-card:hover img { transform: scale(1.035); }
 .author-card h2 { font-size: 25px; margin: 24px 0 10px; }
 .author-card p { color: var(--brand-body); font-style: italic; }
-.about-hero { background: var(--brand-ink); color: var(--brand-bg); text-align: center; padding: 100px 0; overflow: hidden; }
-.about-hero h1 { color: var(--brand-bg); font-size: clamp(38px, 6vw, 62px); font-style: italic; }
+/* ── About Hero ── */
+.about-hero { background: var(--brand-ink); color: var(--brand-bg); text-align: center; padding: 96px 0 128px; overflow: hidden; position: relative; }
+.about-hero-texture::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M0 0h20v20H0zM20 20h20v20H20z'/%3E%3C/g%3E%3C/svg%3E");
+  opacity: .1; z-index: 0;
+}
+.about-hero-inner { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+.about-hero h1, .about-hero-title { color: var(--brand-bg); font-size: clamp(36px, 6vw, 60px); font-style: italic; line-height: 1.15; margin: 24px 0 32px; }
+.about-hero-desc { color: rgb(214 211 209); font-size: clamp(16px, 2vw, 20px); font-weight: 300; max-width: 640px; margin: 0 auto; line-height: 1.7; }
+
+/* ── About Story (Hikayemiz) ── */
+.about-story-section { padding: 80px 0 112px; }
+.about-story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.about-image-decorated { position: relative; }
+.about-image-main {
+  position: relative; z-index: 20; aspect-ratio: 3/4; overflow: hidden;
+  box-shadow: 0 22px 50px rgba(28,27,26,.18); border: 8px solid #fff; background: #fff;
+}
+.about-image-main img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.2); transition: filter .7s; }
+.about-image-decorated:hover .about-image-main img { filter: grayscale(0); }
+.about-image-frame {
+  position: absolute; top: -24px; left: -24px; width: 100%; height: 100%;
+  border: 1px solid rgba(122,74,46,.3); z-index: 10; pointer-events: none;
+}
+.about-image-blur {
+  position: absolute; bottom: -24px; right: -24px; width: 192px; height: 192px;
+  background: var(--brand-soft); border-radius: 50%; filter: blur(48px); opacity: .5; z-index: 0;
+}
+.about-story-text { padding-top: 32px; }
+.about-story-text h2 { font-size: clamp(28px, 3.5vw, 40px); margin: 0 0 32px; }
+.about-story-body { display: flex; flex-direction: column; gap: 24px; color: var(--brand-body); font-weight: 300; line-height: 1.8; text-align: justify; font-size: 18px; }
+.about-story-body p { margin: 0; }
+.about-drop-cap {
+  float: left; font-family: "Libre Baskerville", serif; font-size: 60px; line-height: .8;
+  margin-right: 12px; margin-top: -4px; color: var(--brand-accent);
+}
+.about-blockquote {
+  border-left: 4px solid var(--brand-accent); padding-left: 24px; padding-top: 8px; padding-bottom: 8px;
+  margin: 8px 0; color: #5E4B3C; font-family: "Libre Baskerville", serif; font-style: italic; font-size: 20px;
+  text-align: left;
+}
+
+/* ── Stats Band ── */
+.stats-band { background: var(--brand-soft); border-block: 1px solid var(--brand-border); padding: 52px 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.stat-value { font-family: "Libre Baskerville", serif; font-size: clamp(36px, 5vw, 48px); color: var(--brand-accent); font-weight: 700; margin-bottom: 8px; }
+.stats-divided { border-collapse: collapse; }
+.stats-divided .stat-item { padding: 16px; }
+.stats-divided .stat-item + .stat-item { border-left: 1px solid #D1CEC7; }
+
+/* ── Process (Kitabın Yolculuğu) ── */
+.about-process-head { text-align: center; margin-bottom: 64px; }
+.about-process-head h2 { font-size: clamp(28px, 3.5vw, 36px); margin: 0 0 16px; }
+.about-process-head p { color: #555; font-weight: 300; max-width: 640px; margin: 0 auto; }
+.process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.about-process-card {
+  text-align: center; border: 1px solid var(--brand-border); padding: 32px;
+  background: var(--brand-bg); transition: border-color .3s;
+}
+.about-process-card:hover { border-color: var(--brand-accent); }
+.about-process-icon {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--brand-ink);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; transition: background .3s;
+}
+.about-process-card:hover .about-process-icon { background: var(--brand-accent); }
+.about-process-card h3 { font-size: 18px; font-weight: 700; margin: 0 0 12px; }
+.about-process-card p { font-size: 14px; color: #555; font-weight: 300; line-height: 1.6; margin: 0; }
+
+/* ── Akademik Hassasiyet ── */
+.about-academic { background: var(--brand-ink); color: var(--brand-bg); text-align: center; padding: 80px 0; }
+.about-academic-inner { max-width: 720px; margin: 0 auto; }
+.about-academic-icon { color: var(--brand-accent); opacity: .8; margin: 0 auto 24px; display: block; }
+.about-academic h2 { color: var(--brand-bg); font-size: clamp(24px, 3vw, 30px); margin: 0 0 24px; }
+.about-academic p { color: rgb(214 211 209); font-weight: 300; line-height: 1.7; margin: 0 0 32px; }
+.about-keywords {
+  display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+  font-size: 14px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--brand-accent);
+}
+
+/* ── Okur Ailemize Katılın ── */
+.about-join { background: var(--brand-soft); padding: 96px 0; }
+.about-join-inner {
+  max-width: 1000px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 48px;
+}
+.about-join-text { flex: 1; }
+.about-join-text h2 { font-size: clamp(26px, 3vw, 32px); margin: 0 0 16px; }
+.about-join-text p { color: var(--brand-body); font-weight: 300; line-height: 1.7; margin: 0 0 32px; }
+.about-x-link {
+  display: inline-flex; align-items: center; gap: 16px;
+  color: var(--brand-accent); transition: opacity .2s;
+}
+.about-x-link:hover { opacity: .7; }
+.about-x-link span {
+  font-size: 14px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--brand-ink); transition: color .3s;
+}
+.about-x-link:hover span { color: var(--brand-accent); }
+.about-join-image {
+  width: 33%; flex-shrink: 0; aspect-ratio: 1; background: #D1CEC7; padding: 16px;
+  transform: rotate(3deg); box-shadow: 0 16px 40px rgba(28,27,26,.18);
+}
+.about-join-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+
+/* ── Old about classes (kept for compat) ── */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
 .about-image { position: relative; }
 .about-image img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 8px solid #fff; box-shadow: 0 22px 42px rgba(28,27,26,.16); }
-.stats-band { background: var(--brand-soft); border-block: 1px solid var(--brand-border); padding: 52px 0; }
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
-.stat-value { font-family: "Libre Baskerville", serif; font-size: 48px; color: var(--brand-accent); font-weight: 700; }
-.process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
 .process-card { text-align: center; border: 1px solid var(--brand-border); padding: 30px; background: var(--brand-bg); }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 76px; padding-bottom: 92px; }
 .contact-line { display: flex; gap: 18px; margin-bottom: 34px; }
@@ -439,6 +540,22 @@ button, input, textarea, select { font: inherit; }
   .philosophy-card { padding: 32px 24px; }
   .split, .contact-grid, .detail-grid, .v1-hero, .footer-grid { grid-template-columns: 1fr; }
   .info-list { grid-template-columns: 1fr; }
+
+  /* About page responsive */
+  .about-hero { padding: 72px 0 96px; }
+  .about-story-section { padding: 56px 0 72px; }
+  .about-story-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-image-frame { top: -12px; left: -12px; }
+  .about-image-blur { bottom: -12px; right: -12px; width: 120px; height: 120px; }
+  .about-story-text { padding-top: 0; }
+  .about-story-body { font-size: 16px; }
+  .about-drop-cap { font-size: 48px; }
+  .about-blockquote { font-size: 17px; }
+  .stats-divided .stat-item + .stat-item { border-left: 0; border-top: 1px solid #D1CEC7; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .about-process-head { margin-bottom: 40px; }
+  .about-join-inner { flex-direction: column; text-align: center; }
+  .about-join-image { width: 60%; margin: 0 auto; }
 
   .admin-shell { grid-template-columns: 1fr; }
   .admin-sidebar { position: static; height: auto; }
