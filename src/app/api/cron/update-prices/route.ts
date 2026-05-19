@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import * as cheerio from "cheerio";
 import { getAdminClient } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const CRON_SECRET = process.env.CRON_SECRET;
 
 const HEADERS: Record<string, string> = {
@@ -112,6 +115,7 @@ export async function GET(request: Request) {
         headers: HEADERS,
         redirect: "follow",
         signal: AbortSignal.timeout(15000),
+        cache: "no-store",
       });
 
       if (!res.ok) {

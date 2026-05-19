@@ -8,6 +8,7 @@ const navItems = [
   ["Anasayfa", "/"],
   ["Hakkımızda", "/hakkimizda"],
   ["Kitaplar", "/kitaplar"],
+  ["Setler", "/setler"],
   ["Yazarlar", "/yazarlar"],
   ["İletişim", "/iletisim"],
 ] as const;
@@ -95,6 +96,7 @@ export function SiteFooter({ v1 = false }: { v1?: boolean }) {
           <Link href={`${prefix}/`}>Anasayfa</Link>
           <Link href={`${prefix}/hakkimizda`}>Hakkımızda</Link>
           <Link href={`${prefix}/kitaplar`}>Kitaplar</Link>
+          <Link href={`${prefix}/setler`}>Setler</Link>
           <Link href={`${prefix}/iletisim`}>İletişim</Link>
         </nav>
         <div className="footer-divider" />

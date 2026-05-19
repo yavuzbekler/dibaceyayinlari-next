@@ -11,6 +11,7 @@ import {
   ScrollText,
 } from "lucide-react";
 import type { Book } from "@/lib/types";
+import { SetsShowcase } from "@/components/sets-showcase";
 
 const QuoteIcon = ({ size = 20 }: { size?: number }) => (
   <svg
@@ -28,12 +29,23 @@ const QuoteIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
+type SetWithBooks = {
+  id: string;
+  name: string;
+  description: string | null;
+  cover: string | null;
+  book_set_items: { book_id: string; book: { id: string; title: string; cover: string | null; author_id: string; author: { name: string } | null } | null }[];
+  set_sales_links: { name: string; url: string; price: number }[];
+};
+
 export function HomeClassic({
   books,
   content,
+  sets = [],
 }: {
   books: Book[];
   content: Record<string, string>;
+  sets?: SetWithBooks[];
 }) {
   const [current, setCurrent] = useState(0);
   const [bookSlide, setBookSlide] = useState(0);
@@ -256,6 +268,29 @@ export function HomeClassic({
           </div>
         </div>
       </section>
+
+      {/* Book Sets Section */}
+      {sets.length > 0 && (
+        <section className="section sets-section">
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <span className="eyebrow">Özel Koleksiyonlar</span>
+                <h2>Kitap Setleri</h2>
+              </div>
+              <Link href="/setler" className="btn-text desktop-only">
+                Tüm Setleri Gör <ArrowRight size={14} />
+              </Link>
+            </div>
+            <SetsShowcase sets={sets} />
+            <div className="mobile-only book-view-all" style={{ marginTop: 24 }}>
+              <Link href="/setler" className="btn-text-underline">
+                Tüm Setleri Gör
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Philosophy Section */}
       <section className="section philosophy">

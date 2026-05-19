@@ -97,3 +97,22 @@ export async function getAdminByUsername(username: string) {
   if (error) throw error;
   return data;
 }
+
+export async function getBookSets() {
+  const { data, error } = await getSupabase()
+    .from("book_sets")
+    .select("*, book_set_items(*, book:books(id, title, cover, author_id, author:authors(name))), set_sales_links(*)")
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getHomepageSets() {
+  const { data, error } = await getSupabase()
+    .from("book_sets")
+    .select("*, book_set_items(*, book:books(id, title, cover, author_id, author:authors(name))), set_sales_links(*)")
+    .eq("show_on_homepage", true)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}

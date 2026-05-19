@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookOpen, FileText, LayoutDashboard, LogOut, Users,
-  ChevronDown, Sun, Moon, Monitor, Lock, UserPlus
+  ChevronDown, Sun, Moon, Monitor, Lock, UserPlus, DollarSign, Package
 } from "lucide-react";
 
 type Theme = "light" | "dark" | "system";
@@ -14,6 +14,8 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/books", label: "Kitaplar", icon: BookOpen },
   { href: "/admin/authors", label: "Yazarlar", icon: Users },
+  { href: "/admin/sets", label: "Setler", icon: Package },
+  { href: "/admin/price-management", label: "Fiyat Yönetimi", icon: DollarSign },
   { href: "/admin/site-settings", label: "Site Metinleri", icon: FileText },
   { href: "/admin/users", label: "Kullanıcılar", icon: UserPlus },
 ];
@@ -91,7 +93,7 @@ export function AdminShellClient({ username, children }: { username: string; chi
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <div className="admin-logo">Dibace Admin</div>
+        <div className="admin-logo">Dibace Admin <span className="admin-by">BY MTY</span></div>
         <nav className="admin-nav">
           {navItems.map((item) => (
             <Link

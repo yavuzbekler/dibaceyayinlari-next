@@ -82,5 +82,48 @@ create policy "Public read sales links" on sales_links for select using (true);
 drop policy if exists "Public read site contents" on site_contents;
 create policy "Public read site contents" on site_contents for select using (true);
 
+create table if not exists book_sets (
+  id text primary key,
+  name text not null,
+  description text,
+  cover text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists book_set_items (
+  id uuid primary key default gen_random_uuid(),
+  set_id text not null references book_sets(id) on delete cascade,
+  book_id text not null references books(id) on delete cascade,
+  sort_order integer not null default 0,
+  unique(set_id, book_id)
+);
+
+create table if not exists set_sales_links (
+  id uuid primary key default gen_random_uuid(),
+  set_id text not null references book_sets(id) on delete cascade,
+  name text not null,
+  url text not null default '',
+  price numeric(10,2) not null default 0,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+drop trigger if exists book_sets_updated_at on book_sets;
+create trigger book_sets_updated_at before update on book_sets for each row execute function handle_updated_at();
+
+alter table book_sets enable row level security;
+alter table book_set_items enable row level security;
+alter table set_sales_links enable row level security;
+
+drop policy if exists "Public read book_sets" on book_sets;
+create policy "Public read book_sets" on book_sets for select using (true);
+drop policy if exists "Public read book_set_items" on book_set_items;
+create policy "Public read book_set_items" on book_set_items for select using (true);
+drop policy if exists "Public read set_sales_links" on set_sales_links;
+create policy "Public read set_sales_links" on set_sales_links for select using (true);
+
 create index if not exists books_author_id_idx on books(author_id);
 create index if not exists sales_links_book_id_idx on sales_links(book_id, sort_order);
+create index if not exists book_set_items_set_id_idx on book_set_items(set_id, sort_order);
+create index if not exists set_sales_links_set_id_idx on set_sales_links(set_id, sort_order);

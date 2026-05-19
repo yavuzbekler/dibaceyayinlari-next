@@ -8,7 +8,12 @@ export const dynamic = "force-dynamic";
 export default async function BookDetailPage({ params }: { params: { id: string } }) {
   const book = await getBook(params.id);
   if (!book) notFound();
-  const links = [...(book.sales_links ?? [])].sort((a, b) => a.price - b.price);
+  const links = [...(book.sales_links ?? [])].sort((a, b) => {
+    if (a.price === 0 && b.price > 0) return 1;
+    if (b.price === 0 && a.price > 0) return -1;
+    return a.price - b.price;
+  });
+  const cheapestPrice = links.length > 0 && links[0].price > 0 ? links[0].price : null;
 
   return (
     <PublicShell>
@@ -31,12 +36,18 @@ export default async function BookDetailPage({ params }: { params: { id: string 
               <>
                 <h2>Satış Kanalları</h2>
                 <div className="sales-list">
-                  {links.map((link) => (
-                    <a key={`${link.name}-${link.url}`} href={link.url} target="_blank" rel="noreferrer">
-                      <strong>{link.name}</strong>
-                      <span>{Number(link.price) > 0 ? `${Number(link.price).toFixed(2)} TL` : "—"} →</span>
-                    </a>
-                  ))}
+                  {links.map((link) => {
+                    const isCheapest = cheapestPrice !== null && link.price === cheapestPrice;
+                    return (
+                      <a key={`${link.name}-${link.url}`} href={link.url} target="_blank" rel="noreferrer" className={isCheapest ? "sales-cheapest" : ""}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <strong>{link.name}</strong>
+                          {isCheapest && <span className="sales-badge">En Uygun</span>}
+                        </div>
+                        <span>{Number(link.price) > 0 ? `${Number(link.price).toFixed(2)} TL` : "—"} →</span>
+                      </a>
+                    );
+                  })}
                 </div>
               </>
             )}

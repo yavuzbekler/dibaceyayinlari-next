@@ -42,3 +42,31 @@ export type Admin = {
   email: string | null;
   created_at?: string;
 };
+
+export type BookSet = {
+  id: string;
+  name: string;
+  description: string | null;
+  cover: string | null;
+  show_on_homepage: boolean;
+  created_at?: string;
+  items?: BookSetItem[];
+  sales_links?: SetSalesLink[];
+};
+
+export type BookSetItem = {
+  id?: string;
+  set_id: string;
+  book_id: string;
+  sort_order?: number;
+  book?: Book;
+};
+
+export type SetSalesLink = {
+  id?: string;
+  set_id?: string;
+  name: string;
+  url: string;
+  price: number;
+  sort_order?: number;
+};
