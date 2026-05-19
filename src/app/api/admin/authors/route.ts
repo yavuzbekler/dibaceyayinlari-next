@@ -12,7 +12,7 @@ export async function PUT(request: Request) {
 }
 
 async function upsertAuthor(request: Request) {
-  if (!isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await request.json();
   const { original_id, created_at, updated_at, ...author } = body;
   const { data, error } = await (await getAdminClient()).from("authors").upsert(author).select("*").single();
@@ -22,7 +22,7 @@ async function upsertAuthor(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const id = new URL(request.url).searchParams.get("id");
   const { error } = await (await getAdminClient()).from("authors").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });

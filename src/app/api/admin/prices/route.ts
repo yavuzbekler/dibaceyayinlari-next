@@ -8,7 +8,7 @@ function unauthorized() {
 }
 
 export async function GET() {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const supabase = await getAdminClient();
   const { data, error } = await supabase
     .from("books")
@@ -26,7 +26,7 @@ function isCreate(item: UpdateItem | CreateItem): item is CreateItem {
 }
 
 export async function POST(request: Request) {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const items: (UpdateItem | CreateItem)[] = await request.json();
   if (!Array.isArray(items)) {
     return NextResponse.json({ error: "Array bekleniyor" }, { status: 400 });

@@ -18,7 +18,7 @@ export async function PUT(request: Request) {
 }
 
 async function upsertBook(request: Request) {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const body = await request.json();
   const {
     sales_links = [],
@@ -64,7 +64,7 @@ async function upsertBook(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const id = new URL(request.url).searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const { error } = await (await getAdminClient()).from("books").delete().eq("id", id);

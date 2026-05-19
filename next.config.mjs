@@ -6,7 +6,7 @@ const nextConfig = {
     unoptimized: true
   },
   cacheMaxMemorySize: 0,
-  allowedDevOrigins: ["testdibaceyayinlari.xoka.com"]
+  allowedDevOrigins: ["testdibaceyayinlari.xoka.com", "*.xoka.com"]
 };
 
 export default nextConfig;

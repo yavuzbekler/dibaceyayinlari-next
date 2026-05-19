@@ -1,7 +1,7 @@
 import { requireAdmin } from "@/lib/auth";
 import { AdminShellClient } from "./admin-shell-client";
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
-  const username = requireAdmin();
+export async function AdminShell({ children }: { children: React.ReactNode }) {
+  const username = await requireAdmin();
   return <AdminShellClient username={username}>{children}</AdminShellClient>;
 }

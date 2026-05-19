@@ -8,7 +8,7 @@ function unauthorized() {
 }
 
 export async function GET() {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const supabase = await getAdminClient();
   const { data, error } = await supabase
     .from("book_sets")
@@ -19,7 +19,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const body = await request.json();
   const { items = [], sales_links = [], ...set } = body;
 
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!isAdminAuthenticated()) return unauthorized();
+  if (!await isAdminAuthenticated()) return unauthorized();
   const id = new URL(request.url).searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
   const { error } = await (await getAdminClient()).from("book_sets").delete().eq("id", id);

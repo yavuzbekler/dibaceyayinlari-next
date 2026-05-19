@@ -4,8 +4,8 @@ import { isAdminAuthenticated, getAdminUsername } from "@/lib/auth";
 import { getAdminClient } from "@/lib/db";
 
 export async function POST(request: Request) {
-  if (!isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const username = getAdminUsername();
+  if (!await isAdminAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const username = await getAdminUsername();
   if (!username) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { oldPassword, newPassword } = await request.json();
