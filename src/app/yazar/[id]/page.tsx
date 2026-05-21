@@ -6,8 +6,9 @@ import { getAuthor } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-export default async function AuthorDetailPage({ params }: { params: { id: string } }) {
-  const author = await getAuthor(params.id);
+export default async function AuthorDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const author = await getAuthor(id);
   if (!author) notFound();
 
   return (
